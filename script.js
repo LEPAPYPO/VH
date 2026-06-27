@@ -4,22 +4,23 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('contrast-toggle').addEventListener('click', () => document.body.classList.toggle('high-contrast'));
     document.getElementById('dys-toggle').addEventListener('click', () => document.body.classList.toggle('dyslexia-font'));
 
-    // BDD STOCKAGE (Vide au démarrage)
+    // STOCKAGE BASE DE DONNÉES (Vide au démarrage)
     let articles = []; 
-    
     let comptes = [
         { user: "VH", pass: "12345678", role: "Super Admin" }
     ];
     let candidatures = [];
 
-    // NAVIGATION
+    // SYSTÈME DE NAVIGATION (Gère tes pages : académie, rh, contact, connexion, admin)
     const navItems = document.querySelectorAll('.nav-item');
     function naviguer() {
         const hash = window.location.hash || '#accueil';
         document.querySelectorAll('main.page-content').forEach(p => p.style.display = 'none');
+        
         const activePage = document.querySelector(hash);
         if (activePage) activePage.style.display = 'block';
         
+        // Met à jour la classe active sur ton nouveau menu à 3 liens
         navItems.forEach(item => {
             if(item.getAttribute('href') === hash) item.classList.add('active');
             else item.classList.remove('active');
@@ -29,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', naviguer);
     naviguer();
 
-    // CONNEXION
+    // FORMULAIRE DE CONNEXION ADMIN
     document.getElementById('login-form').addEventListener('submit', function(e) {
         e.preventDefault();
         const inputUser = document.getElementById('username').value;
@@ -38,14 +39,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const compteTrouve = comptes.find(c => c.user === inputUser && c.pass === inputPass);
         
         if (compteTrouve) {
-            msg.style.color = "green"; msg.style.display = "block"; msg.textContent = "✅ Connexion réussie !";
-            setTimeout(() => { window.location.hash = "admin"; msg.style.display = "none"; this.reset(); }, 1000);
+            msg.style.color = "green"; 
+            msg.style.display = "block"; 
+            msg.textContent = "✅ Connexion réussie !";
+            setTimeout(() => { 
+                window.location.hash = "admin"; 
+                msg.style.display = "none"; 
+                this.reset(); 
+            }, 1000);
         } else {
-            msg.style.color = "red"; msg.style.display = "block"; msg.textContent = "❌ Identifiants incorrects.";
+            msg.style.color = "red"; 
+            msg.style.display = "block"; 
+            msg.textContent = "❌ Identifiants incorrects.";
         }
     });
 
-    // CANDIDATURE RH
+    // TRANSMISSION CANDIDATURE RH
     document.getElementById('rh-form').addEventListener('submit', function(e) {
         e.preventDefault();
         candidatures.push({
@@ -59,12 +68,12 @@ document.addEventListener('DOMContentLoaded', () => {
             pourquoi: document.getElementById('rh-pourquoi').value
         });
         this.reset();
-        alert("✨ Candidature transmise !");
+        alert("✨ Votre candidature a bien été transmise !");
         updateAdminView();
         window.location.hash = "accueil";
     });
 
-    // AFFICHAGE ACCUEIL
+    // RENDU DES ANNONCES DYNAMIQUES
     function renderAnnonces() {
         const container = document.getElementById('dynamic-news');
         if (!container) return;
@@ -86,17 +95,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // TABLEAU DE BORD ADMIN
+    // MISE À JOUR DE L'ESPACE ADMIN (Comptes & Candidatures)
     function updateAdminView() {
         const userTable = document.getElementById('admin-users-table');
         if (userTable) {
             userTable.innerHTML = "";
             comptes.forEach((c, index) => {
-                const btn = c.user === "VH" ? "Maître" : `<button class="del-user-btn" data-index="${index}" style="background:#e1000f; color:white; border:none; padding:4px 8px; border-radius:3px; cursor:pointer;">Supprimer</button>`;
+                const btn = c.user === "VH" ? `<span style="color:#777; font-size:0.85rem; font-style:italic;">Maître</span>` : `<button class="del-user-btn" data-index="${index}" style="background:#e1000f; color:white; border:none; padding:4px 8px; border-radius:3px; cursor:pointer;">Supprimer</button>`;
                 userTable.innerHTML += `
                     <tr style="border-bottom:1px solid #e5e5e5;">
                         <td style="padding:8px; font-weight:bold;">${c.user}</td>
-                        <td style="padding:8px; color:#666;">${c.pass}</td>
+                        <td style="padding:8px; color:#666; font-family:monospace;">${c.pass}</td>
                         <td style="padding:8px; text-align:right;">${btn}</td>
                     </tr>
                 `;
@@ -113,13 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 candidatures.forEach(cand => {
                     rhList.innerHTML += `
                         <div style="background:#f4f4f4; padding:15px; border-radius:5px; margin-bottom:15px; border-left:5px solid #000091;">
-                            <h4>👤 ${cand.prenom} ${cand.nom} (${cand.age} ans) — ${cand.role}</h4>
-                            <p><strong>Dispo :</strong> ${cand.dispo}</p>
-                            <p><strong>Motivations :</strong> ${cand.motivation}</p>
-                            <p><strong>Pourquoi :</strong> ${cand.pourquoi}</p>
+                            <h4>👤 ${cand.prenom} ${cand.nom} (${cand.age} ans) — <span style="color:#000091;">${cand.role}</span></h4>
+                            <p style="margin:5px 0;"><strong>Dispo :</strong> ${cand.dispo}</p>
+                            <p style="margin:5px 0;"><strong>Motivations :</strong> ${cand.motivation}</p>
+                            <p style="margin:5px 0;"><strong>Pourquoi :</strong> ${cand.pourquoi}</p>
                             <div style="margin-top:10px;">
-                                <button class="status-btn" data-id="${cand.id}" data-action="accepter" style="background:#1f8d49; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">Accepter</button>
-                                <button class="status-btn" data-id="${cand.id}" data-action="refuser" style="background:#e1000f; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer;">Refuser</button>
+                                <button class="status-btn" data-id="${cand.id}" data-action="accepter" style="background:#1f8d49; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold; margin-right:5px;">Accepter</button>
+                                <button class="status-btn" data-id="${cand.id}" data-action="refuser" style="background:#e1000f; color:white; border:none; padding:6px 12px; border-radius:4px; cursor:pointer; font-weight:bold;">Refuser</button>
                             </div>
                         </div>
                     `;
@@ -128,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // NOUVELLE ANNONCE
+    // FORMULAIRE CREATION ANNONCE ADMIN
     document.getElementById('admin-news-form').addEventListener('submit', function(e) {
         e.preventDefault();
         articles.unshift({
@@ -143,7 +152,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.hash = "accueil";
     });
 
-    // NOUVEAU COMPTE MODERATEUR
+    // FORMULAIRE CRÉATION COMPTE MODÉRATEUR
     document.getElementById('admin-user-form').addEventListener('submit', function(e) {
         e.preventDefault();
         comptes.push({
@@ -153,10 +162,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         document.getElementById('new-user-name').value = "";
         document.getElementById('new-user-pass').value = "";
+        alert("👤 Compte modérateur créé !");
         updateAdminView();
     });
 
-    // CLICS SUPPR & RH DECISION
+    // ÉVÉNEMENTS SUPPRESSION & DECISION DYNAMIQUES
     document.body.addEventListener('click', function(e) {
         if(e.target.classList.contains('del-user-btn')) {
             comptes.splice(e.target.getAttribute('data-index'), 1);
