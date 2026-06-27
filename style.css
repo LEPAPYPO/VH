@@ -179,9 +179,9 @@ main.page-content {
     text-decoration: none; 
 }
 
-/* Ajustement de la taille du nouveau logo */
+/* Rend le logo propre et à la bonne taille */
 .site-logo {
-    height: 75px;      /* Fixe une hauteur propre et élégante */
-    width: auto;       /* Garde les proportions de l'image pour ne pas la déformer */
+    height: 75px;      /* Fixe une hauteur de 75 pixels */
+    width: auto;       /* Garde les proportions sans déformer l'image */
     display: block;
 }
