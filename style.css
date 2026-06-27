@@ -178,3 +178,10 @@ main.page-content {
     color: #444; 
     text-decoration: none; 
 }
+
+/* Ajustement de la taille du nouveau logo */
+.site-logo {
+    height: 75px;      /* Fixe une hauteur propre et élégante */
+    width: auto;       /* Garde les proportions de l'image pour ne pas la déformer */
+    display: block;
+}
