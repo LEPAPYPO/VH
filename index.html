@@ -3,31 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Académie Victor Hugo - Direction</title>
+    <title>Académie Victor Hugo</title>
     <link rel="stylesheet" href="style.css">
     <style>
-        /* Thème et structure de la barre d'administration en haut */
-        .hidden-section { display: none !important; }
-        .admin-layout { display: none; min-height: 100vh; background: #f9f9f9; font-family: Arial, sans-serif; }
-        
-        .adm-topbar { background: #000091; color: white; border-bottom: 2px solid #e1000f; }
-        .adm-topbar-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 5%; border-bottom: 1px solid rgba(255,255,255,0.1); }
-        .adm-topbar-nav { display: flex; list-style: none; padding: 0 5%; }
-        
-        .adm-btn { background: none; border: none; color: white; padding: 15px 20px; font-weight: 500; cursor: pointer; font-size: 0.95rem; }
-        .adm-btn:hover, .adm-btn.active { background-color: rgba(255, 255, 255, 0.15); }
-        
-        .adm-container { width: 90%; max-width: 1200px; margin: 40px auto; }
-        .adm-card { background: white; padding: 25px; border-radius: 8px; border: 1px solid #e5e5e5; margin-bottom: 20px; }
-        .adm-input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; margin-top: 5px; box-sizing: border-box; }
-        
-        .adm-action-btn { padding: 10px 20px; border: none; border-radius: 4px; font-weight: bold; cursor: pointer; color: white; background: #000091; }
+        /* Styles dédiés à la Barre d'Administration Haute (Thème identique à l'accueil) */
+        .admin-layout { 
+            display: none; 
+            min-height: 100vh; 
+            background: #f9f9f9; 
+            font-family: Arial, sans-serif; 
+            margin: 0;
+            padding: 0;
+        }
+        .adm-topbar { 
+            background: #000091; 
+            color: white; 
+            border-bottom: 3px solid #e1000f; 
+            position: sticky;
+            top: 0;
+            z-index: 9999;
+        }
+        .adm-topbar-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 10px 5%; 
+            border-bottom: 1px solid rgba(255,255,255,0.1); 
+        }
+        .adm-topbar-nav { 
+            display: flex; 
+            list-style: none; 
+            padding: 0 5%; 
+            margin: 0;
+        }
+        .adm-btn { 
+            background: none; 
+            border: none; 
+            color: white; 
+            padding: 15px 20px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            font-size: 0.95rem; 
+            transition: background 0.2s;
+        }
+        .adm-btn:hover, .adm-btn.active { 
+            background-color: rgba(255, 255, 255, 0.2); 
+            border-bottom: 3px solid white;
+        }
+        .adm-container { 
+            width: 90%; 
+            max-width: 1200px; 
+            margin: 30px auto; 
+        }
+        .adm-card { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 4px; 
+            border: 1px solid #e5e5e5; 
+            margin-bottom: 20px; 
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .adm-input { 
+            width: 100%; 
+            padding: 10px; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+            margin-top: 5px; 
+            box-sizing: border-box; 
+        }
+        .adm-action-btn { 
+            padding: 10px 20px; 
+            border: none; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            color: white; 
+            background: #000091; 
+        }
         .adm-action-btn-danger { background: #e1000f; }
         .adm-action-btn-success { background: #1f8d49; }
+
+        /* Ajustements grille d'administration */
+        .adm-grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) {
+            .adm-grid-2 { grid-template-columns: 1fr; }
+            .adm-topbar-nav { flex-wrap: wrap; padding: 0; }
+        }
     </style>
 </head>
 <body>
 
+    <!-- ================= ZONE PUBLIQUE ================= -->
     <div id="wrapper-public">
         <div class="accessibility-bar">
             <button id="contrast-toggle">🌓 Renforcer les contrastes</button>
@@ -38,7 +108,7 @@
             <div class="container header-flex">
                 <div class="logo-area">
                     <a href="#accueil" class="logo-link">
-                        <img src="logo.jpg" alt="Logo République Française - Académie Victor Hugo" class="site-logo" style="max-height: 85px; width: auto;">
+                        <img src="logo.jpg" alt="Logo République Française" class="site-logo" style="max-height: 85px; width: auto;">
                     </a>
                 </div>
                 <div class="search-area">
@@ -61,12 +131,13 @@
             </div>
         </nav>
 
+        <!-- S1 : ACCUEIL -->
         <main id="accueil" class="container page-content">
             <section class="hero-section">
                 <div class="hero-content">
                     <span class="badge">À la une</span>
                     <h1>L'académie Victor Hugo</h1>
-                    <p>L'académie Victor Hugo a depuis peu les 100 membres.</p>
+                    <p>L'académie Victor Hugo a depuis peu dépassé les 100 membres.</p>
                 </div>
             </section>
              
@@ -76,20 +147,22 @@
             </section>
         </main>
 
-        <main id="effectif" class="container page-content">
+        <!-- S2 : PAGE EFFECTIF -->
+        <main id="effectif" class="container page-content" style="display:none;">
             <section style="background: white; padding: 40px; border-radius: 8px; border: 1px solid #e5e5e5; margin-top: 30px; margin-bottom: 30px;">
-                <h1 style="color: #000091; margin-bottom: 10px;">📊 Effectifs de l'Académie</h1>
+                <h1 style="color: #000091; margin-bottom: 10px;">Effectifs de l'Académie</h1>
                 <p style="color: #666; margin-bottom: 5px;">Organigramme et état des postes actuels au sein de l'Académie Victor Hugo.</p>
-                <p style="color: #d10211; font-size: 0.9rem; font-weight: bold; margin-bottom: 30px;">📅 Mis à jour le : <span id="public-date-update">29/06/2026</span></p>
+                <p style="color: #e1000f; font-size: 0.9rem; font-weight: bold; margin-bottom: 30px;">Mis à jour le : <span id="public-date-update">29/06/2026</span></p>
                 
                 <div id="public-effectifs-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;"></div>
             </section>
         </main>
 
-        <main id="rh" class="container page-content">
+        <!-- S3 : FORMULAIRE RH -->
+        <main id="rh" class="container page-content" style="display:none;">
             <section style="background: white; padding: 40px; border-radius: 8px; border: 1px solid #e5e5e5; margin-top: 30px;">
                 <h1 style="color: #000091; margin-bottom: 10px;">Rejoindre nos équipes</h1>
-                <p style="color: #666; margin-bottom: 30px;">Déposez votre candidature pour intégrer l'Académie Victor Hugo.</p>
+                <p style="color: #666; margin-bottom: 30px;">Déposez votre candidature pour intégrer l'Académie.</p>
                 
                 <form id="rh-form">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 20px;">
@@ -133,15 +206,17 @@
             </section>
         </main>
 
-        <main id="contact" class="container page-content">
+        <!-- S4 : CONTACT -->
+        <main id="contact" class="container page-content" style="display:none;">
             <section style="background: white; padding: 40px; border-radius: 8px; border: 1px solid #e5e5e5; margin-top: 30px;">
                 <h1 style="color: #000091; margin-bottom: 20px;">Contactez l'Académie</h1>
-                <p><strong>📧 Email :</strong> support@académie-vh.fr</p>
-                <p><strong>📞 Téléphone :</strong> 09 72 16 10 95</p>
+                <p><strong>Email :</strong> support@académie-vh.fr</p>
+                <p><strong>Téléphone :</strong> 09 72 16 10 95</p>
             </section>
         </main>
 
-        <main id="connexion" class="container page-content">
+        <!-- S5 : CONNEXION -->
+        <main id="connexion" class="container page-content" style="display:none;">
             <section style="background: white; max-width: 450px; margin: 40px auto; padding: 40px; border-radius: 8px; border: 1px solid #e5e5e5;">
                 <h1 style="color: #000091; margin-bottom: 10px; text-align: center;">Espace Connexion</h1>
                 <form id="login-form">
@@ -172,12 +247,14 @@
     </div>
 
 
+    <!-- ================= ZONE PRIVÉE : NAVIGATION BANDEAU HAUT (SANS EMOJIS) ================= -->
     <div id="wrapper-admin" class="admin-layout">
         
+        <!-- BARRE DE NAVIGATION EN HAUT -->
         <header class="adm-topbar">
             <div class="adm-topbar-header">
-                <h3 style="margin:0; font-size:1.2rem; font-weight: bold;">Direction Académique</h3>
-                <a href="#accueil" style="color: white; font-size:0.9rem; font-weight: bold; background: #e1000f; padding: 6px 12px; border-radius: 4px; text-decoration: none;">Quitter</a>
+                <h3 style="margin:0; font-size:1.2rem; font-weight: bold; letter-spacing: 0.5px;">Direction Académique</h3>
+                <a href="#accueil" style="color: white; font-size:0.9rem; font-weight: bold; background: #e1000f; padding: 6px 12px; border-radius: 4px; text-decoration: none;">Quitter l'espace</a>
             </div>
             <nav>
                 <ul class="adm-topbar-nav">
@@ -189,13 +266,15 @@
             </nav>
         </header>
 
+        <!-- ESPACE DE TRAVAIL CENTRAL -->
         <section class="adm-container">
             
+            <!-- VUE 1 : ACTUALITÉS -->
             <div id="tab-actu" class="admin-tab-content">
                 <div style="margin-bottom: 25px; border-left: 4px solid #e1000f; padding-left: 10px;">
                     <h2 style="color:#000091; margin:0;">Gestionnaire des Actualités</h2>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;">
+                <div class="adm-grid-2">
                     <div class="adm-card">
                         <h3 style="margin-top:0; color: #000091; border-bottom:1px solid #e5e5e5; padding-bottom:8px;">Créer un article</h3>
                         <form id="admin-news-form" style="margin-top:15px;">
@@ -221,6 +300,7 @@
                 </div>
             </div>
 
+            <!-- VUE 2 : EFFECTIFS -->
             <div id="tab-effectif" class="admin-tab-content" style="display:none;">
                 <div style="margin-bottom: 25px; border-left: 4px solid #e1000f; padding-left: 10px;">
                     <h2 style="color:#000091; margin:0;">Modification de l'Organigramme</h2>
@@ -233,6 +313,7 @@
                 <div id="admin-effectifs-container" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap:20px; margin-top:20px;"></div>
             </div>
 
+            <!-- VUE 3 : RH -->
             <div id="tab-rh" class="admin-tab-content" style="display:none;">
                 <div style="margin-bottom: 25px; border-left: 4px solid #e1000f; padding-left: 10px;">
                     <h2 style="color:#000091; margin:0;">Dossiers de Candidature</h2>
@@ -240,11 +321,12 @@
                 <div id="admin-rh-list"></div>
             </div>
 
+            <!-- VUE 4 : COMPTES -->
             <div id="tab-users" class="admin-tab-content" style="display:none;">
                 <div style="margin-bottom: 25px; border-left: 4px solid #e1000f; padding-left: 10px;">
                     <h2 style="color:#000091; margin:0;">Gestion des Comptes d'Accès</h2>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px;">
+                <div class="adm-grid-2">
                     <div class="adm-card">
                         <h3 style="margin-top:0; color: #000091; border-bottom:1px solid #e5e5e5; padding-bottom:8px;">Ajouter un opérateur</h3>
                         <form id="admin-user-form" style="display:flex; flex-direction:column; gap:12px; margin-top:15px;">
