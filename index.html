@@ -15,13 +15,11 @@
 
     <header class="main-header">
         <div class="container header-flex">
- <div class="logo-area">
-            <a href="#accueil" class="logo-link">
-                <img src="logo.jpg" alt="Logo République Française - Académie Victor Hugo" class="site-logo">
-            </a>
-        </div>
-
-            
+            <div class="logo-area">
+                <a href="#accueil" class="logo-link">
+                    <img src="logo.jpg" alt="Logo République Française - Académie Victor Hugo" class="site-logo">
+                </a>
+            </div>
             <div class="search-area">
                 <form action="#" method="GET" class="search-form">
                     <input type="text" placeholder="Que recherchez-vous ?..." aria-label="Recherche">
@@ -35,6 +33,7 @@
         <div class="container">
             <ul class="nav-links">
                 <li><a href="#accueil" class="nav-item active">Académie</a></li>
+                <li><a href="#effectif" class="nav-item">Effectif</a></li>
                 <li><a href="#rh" class="nav-item">Ressources Humaines</a></li>
                 <li><a href="#contact" class="nav-item">Contact</a></li>
             </ul>
@@ -53,6 +52,79 @@
         <section class="news-section">
             <h2>Actualités de l'Académie</h2>
             <div id="dynamic-news" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;"></div>
+        </section>
+    </main>
+
+    <main id="effectif" class="container page-content">
+        <section style="background: white; padding: 40px; border-radius: 8px; border: 1px solid #e5e5e5; margin-top: 30px; margin-bottom: 30px;">
+            <h1 style="color: #000091; margin-bottom: 10px;">📊 Effectifs de l'Académie</h1>
+            <p style="color: #666; margin-bottom: 30px;">Organigramme et état des postes actuels au sein de l'Académie Victor Hugo.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px;">
+                
+                <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: #fafafa;">
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">🏛️ Direction Générale Académique</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Directeurs Généraux Académique</span> <span class="badge-count count-success">2/2</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Directeurs Généraux Académique Adjoints</span> <span class="badge-count count-success">3/3</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Assistant général Académique</span> <span class="badge-count count-success">1/1</span></li>
+                    </ul>
+                </div>
+
+                <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: #fafafa;">
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">🎓 Rectorat</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Recteur</span> <span class="badge-count count-success">1/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Recteur Adjoint</span> <span class="badge-count count-success">1/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Secrétaire Général Académique</span> <span class="badge-count count-success">1/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Conseiller Juridique</span> <span class="badge-count count-success">1/1</span></li>
+                    </ul>
+                </div>
+
+                <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: #fafafa;">
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">💼 Cabinet</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Directeur du Cabinet</span> <span class="badge-count count-success">1/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Secrétaire du Cabinet</span> <span class="badge-count count-danger">0/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Agents du Cabinet</span> <span class="badge-count count-danger">0/2</span></li>
+                    </ul>
+                </div>
+
+                <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: #fafafa;">
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">👥 Ressources Humaines</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Directeur des Ressources Humaines</span> <span class="badge-count count-success">1/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Gestionnaire des RH</span> <span class="badge-count count-danger">0/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Assistants RH</span> <span class="badge-count count-danger">0/2</span></li>
+                    </ul>
+                </div>
+
+                <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: #fafafa;">
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">💻 Numérique</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Directeur Service Numérique</span> <span class="badge-count count-success">1/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Délégué Académique au Numérique</span> <span class="badge-count count-danger">0/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Techniciens</span> <span class="badge-count count-warning">1/3</span></li>
+                    </ul>
+                </div>
+
+                <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: #fafafa;">
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">🔍 Inspection Académique</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Directeur des Services de l'Inspection</span> <span class="badge-count count-danger">0/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Inspecteurs</span> <span class="badge-count count-warning">1/3</span></li>
+                    </ul>
+                </div>
+
+                <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: #fafafa;">
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">🩺 Médico-Social</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Infirmier</span> <span class="badge-count count-success">1/1</span></li>
+                        <li style="display: flex; justify-content: space-between; align-items: center;"><span>Psychologue</span> <span class="badge-count count-danger">0/1</span></li>
+                    </ul>
+                </div>
+
+            </div>
         </section>
     </main>
 
