@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
     let candidatures = [];
 
-    // SYSTÈME DE NAVIGATION (Gère tes pages : académie, rh, contact, connexion, admin)
+    // SYSTÈME DE NAVIGATION (Prend en compte l'onglet Effectif)
     const navItems = document.querySelectorAll('.nav-item');
     function naviguer() {
         const hash = window.location.hash || '#accueil';
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const activePage = document.querySelector(hash);
         if (activePage) activePage.style.display = 'block';
         
-        // Met à jour la classe active sur ton nouveau menu à 3 liens
+        // Gère l'activation de la classe active sur les 4 éléments du menu
         navItems.forEach(item => {
             if(item.getAttribute('href') === hash) item.classList.add('active');
             else item.classList.remove('active');
@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // FORMULAIRE CREATION ANNONCE ADMIN
+    // FORMULAIRE CRÉATION ANNONCE ADMIN
     document.getElementById('admin-news-form').addEventListener('submit', function(e) {
         e.preventDefault();
         articles.unshift({
