@@ -5,6 +5,8 @@
     --grey-border: #e5e5e5;
     --white: #ffffff;
     --accent-red: #e1000f;
+    --admin-bg: #f4f6f9;
+    --admin-dark-sidebar: #1e293b;
 }
 
 * { 
@@ -26,7 +28,6 @@ body {
     margin: 0 auto; 
 }
 
-/* --- LOGO SÉCURISÉ --- */
 .site-logo {
     height: 75px;
     width: auto;
@@ -63,11 +64,8 @@ body.high-contrast h1,
 body.high-contrast h2 { 
     color: #0f0 !important; 
 }
-body.dyslexia-font { 
-    font-family: 'OpenDyslexic', 'Comic Sans MS', sans-serif !important; 
-}
 
-/* --- EN-TÊTE / HEADER --- */
+/* --- EN-TÊTE / HEADER & NAV --- */
 .main-header { 
     background-color: var(--white); 
     border-bottom: 1px solid var(--grey-border); 
@@ -78,10 +76,6 @@ body.dyslexia-font {
     justify-content: space-between; 
     align-items: center; 
     flex-wrap: wrap; 
-}
-.logo-area {
-    display: flex;
-    align-items: center;
 }
 .search-form input { 
     padding: 10px; 
@@ -97,8 +91,6 @@ body.dyslexia-font {
     border-radius: 0 4px 4px 0; 
     cursor: pointer; 
 }
-
-/* --- NAVIGATION --- */
 .main-nav { 
     background-color: var(--primary-blue); 
 }
@@ -118,7 +110,7 @@ body.dyslexia-font {
     background-color: rgba(255, 255, 255, 0.15); 
 }
 
-/* --- BANNIÈRE HERO & SECTIONS --- */
+/* --- HERO & HOMEPAGE --- */
 .hero-section { 
     background: linear-gradient(135deg, #001042, #0044cc); 
     color: white; 
@@ -133,9 +125,7 @@ body.dyslexia-font {
     font-weight: bold; 
     border-radius: 3px; 
 }
-.news-section { 
-    margin: 40px 0; 
-}
+.news-section { margin: 40px 0; }
 .news-section h2 { 
     margin-bottom: 25px; 
     color: var(--primary-blue); 
@@ -143,7 +133,7 @@ body.dyslexia-font {
     padding-left: 10px; 
 }
 
-/* --- COMPTEURS PAGES EFFECTIFS --- */
+/* --- BADGES EFFECTIFS --- */
 .badge-count {
     padding: 4px 10px;
     font-weight: bold;
@@ -153,36 +143,154 @@ body.dyslexia-font {
     min-width: 45px;
     text-align: center;
 }
-.count-success { background-color: #1f8d49; } /* Vert complet */
-.count-warning { background-color: #ff9100; } /* Orange incomplet */
-.count-danger { background-color: #e1000f; }  /* Rouge vide */
+.count-success { background-color: #1f8d49; }
+.count-warning { background-color: #ff9100; }
+.count-danger { background-color: #e1000f; }
 
-/* --- GESTION DE PAGES --- */
-main.page-content { 
-    display: none; 
-}
-
-/* --- PIED DE PAGE / FOOTER --- */
+/* --- CONTROLE DES PAGES --- */
+main.page-content { display: none; }
 .main-footer { 
     background-color: #f5f5f5; 
     padding: 30px 0; 
     border-top: 1px solid var(--grey-border); 
     margin-top: 60px; 
-    display: block !important; 
 }
-.footer-content { 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center; 
-    flex-wrap: wrap; 
+.footer-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+.footer-links { display: flex; list-style: none; gap: 20px; align-items: center; }
+.footer-links a { color: #444; text-decoration: none; }
+
+/* =======================================================
+   STRUCTURE DU DASHBOARD ADMIN PRO (X1000 AMÉLIORÉ)
+   ======================================================= */
+.admin-dashboard-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    height: calc(100vh - 40px); /* Hauteur complète moins la barre d'accessibilité */
+    background-color: var(--admin-bg);
 }
-.footer-links { 
-    display: flex; 
-    list-style: none; 
-    gap: 20px; 
-    align-items: center; 
+
+/* BARRE LATÉRALE - SIDEBAR */
+.admin-sidebar {
+    background-color: var(--admin-dark-sidebar);
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 20px 0;
 }
-.footer-links a { 
-    color: #444; 
-    text-decoration: none; 
+.sidebar-header {
+    padding: 0 20px 20px 20px;
+    border-bottom: 1px solid #334155;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
+#admin-user-badge {
+    background: #0ea5e9;
+    padding: 3px 8px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    border-radius: 4px;
+}
+.sidebar-menu {
+    list-style: none;
+    margin-top: 20px;
+    flex-grow: 1;
+}
+.sidebar-btn {
+    width: 100%;
+    background: none;
+    border: none;
+    color: #cbd5e1;
+    text-align: left;
+    padding: 14px 20px;
+    font-size: 0.95rem;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.2s;
+}
+.sidebar-btn:hover {
+    background: #334155;
+    color: #fff;
+}
+.sidebar-btn.active {
+    background: var(--primary-blue);
+    color: white;
+    border-left: 5px solid #38bdf8;
+}
+#rh-count-badge {
+    background: var(--accent-red);
+    color: white;
+    font-size: 0.75rem;
+    padding: 2px 7px;
+    border-radius: 10px;
+}
+.logout-btn {
+    display: block;
+    margin: 0 20px;
+    padding: 12px;
+    background: #b91c1c;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* ESPACE DE TRAVAIL CENTRAL */
+.admin-main-viewport {
+    padding: 40px;
+    overflow-y: auto;
+}
+.admin-sub-page {
+    display: none;
+}
+.admin-sub-page.active {
+    display: block;
+}
+.view-header {
+    margin-bottom: 25px;
+    border-bottom: 1px solid #cbd5e1;
+    padding-bottom: 15px;
+}
+.view-header h2 { color: #0f172a; font-size: 1.8rem; }
+.view-header p { color: #64748b; }
+
+/* COMPOSANTS STYLISÉS INTERNES */
+.admin-card {
+    background: white;
+    border-radius: 8px;
+    padding: 25px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+.admin-card h3 {
+    font-size: 1.1rem;
+    color: #1e293b;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 10px;
+}
+.form-control {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    margin-top: 5px;
+}
+.form-control:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+.btn {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+}
+.btn-success { background: #16a34a; color: white; }
+.btn-primary { background: var(--primary-blue); color: white; }
+.btn-danger { background: var(--accent-red); color: white; }
