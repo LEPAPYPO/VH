@@ -1,10 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    // ACCESSIBILITÉ
-    document.getElementById('contrast-toggle').addEventListener('click', () => document.body.classList.toggle('high-contrast'));
-    document.getElementById('dys-toggle').addEventListener('click', () => document.body.classList.toggle('dyslexia-font'));
+    // SYSTÈME ACCESSIBILITÉ PUBLIC
+    const contrastBtn = document.getElementById('contrast-toggle');
+    const dysBtn = document.getElementById('dys-toggle');
+    if(contrastBtn) contrastBtn.addEventListener('click', () => document.body.classList.toggle('high-contrast'));
+    if(dysBtn) dysBtn.addEventListener('click', () => document.body.classList.toggle('dyslexia-font'));
 
-    // BASE DE DONNÉES DYNAMIQUE INITIALE (EFFECTIFS)
+    // BASE DE DONNÉES CENTRALE DES EFFECTIFS (ENTIÈREMENT MANIPULABLE)
     let systemeEffectifs = [
         {
             categorie: "🏛️ Direction Générale Académique",
@@ -64,262 +66,275 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     let articles = []; 
-    let comptes = [{ user: "VH", pass: "12345678", role: "Super Admin" }];
+    let comptes = [{ user: "VH", pass: "12345678" }];
     let candidatures = [];
-    let dateMiseAJour = "28/06/2026";
+    let dateMiseAJour = "29/06/2026";
 
-    // GLOBAL NAVIGATION (PUBLIC VS ADMIN MODE)
-    function naviguer() {
+    // ROUTAGE SÉCURISÉ : ISOLATION ABSOLUE PUBLIC / ADM
+    function router() {
         const hash = window.location.hash || '#accueil';
-        
+        const publicWrapper = document.getElementById('wrapper-public');
+        const adminWrapper = document.getElementById('wrapper-admin');
+
         if (hash === '#admin') {
-            // Mode Admin : Masquer header public, menu public et footer public
-            document.querySelector('.main-header').style.display = 'none';
-            document.getElementById('public-nav').style.display = 'none';
-            document.getElementById('public-footer').style.display = 'none';
-            
-            document.querySelectorAll('main.page-content').forEach(p => p.style.display = 'none');
-            document.getElementById('admin').style.display = 'grid';
+            // Désactivation totale du bloc public pour bloquer la superposition "moche"
+            if (publicWrapper) publicWrapper.style.display = 'none';
+            if (adminWrapper) adminWrapper.style.display = 'grid';
         } else {
-            // Mode Public : Tout réafficher normalement
-            document.querySelector('.main-header').style.display = 'block';
-            document.getElementById('public-nav').style.display = 'block';
-            document.getElementById('public-footer').style.display = 'block';
-            
-            document.getElementById('admin').style.display = 'none';
+            // Mode normal
+            if (adminWrapper) adminWrapper.style.display = 'none';
+            if (publicWrapper) publicWrapper.style.display = 'block';
+
+            // Affichage de la sous-section demandée
             document.querySelectorAll('main.page-content').forEach(p => p.style.display = 'none');
-            
-            const activePage = document.querySelector(hash);
-            if (activePage) activePage.style.display = 'block';
-            
+            const targetPage = document.querySelector(hash);
+            if (targetPage) targetPage.style.display = 'block';
+
+            // Focus menu haut
             document.querySelectorAll('.nav-item').forEach(item => {
-                if(item.getAttribute('href') === hash) item.classList.add('active');
+                if (item.getAttribute('href') === hash) item.classList.add('active');
                 else item.classList.remove('active');
             });
         }
         window.scrollTo(0, 0);
     }
-    window.addEventListener('hashchange', naviguer);
-    naviguer();
+    window.addEventListener('hashchange', router);
+    router();
 
-    // SIDEBAR DU PANEL ADMIN : NAVIGATION ENTRE SUB-PAGES
-    document.querySelectorAll('.sidebar-btn').forEach(btn => {
+    // INTERRUPTEURS INTERNES DU TABLEAU DE BORD (SIDEBAR)
+    document.querySelectorAll('.adm-btn').forEach(btn => {
         btn.addEventListener('click', function() {
-            document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
-            document.querySelectorAll('.admin-sub-page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.adm-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.admin-tab-content').forEach(tab => tab.style.display = 'none');
             
             this.classList.add('active');
-            document.getElementById(this.getAttribute('data-target')).classList.add('active');
+            const targetId = this.getAttribute('data-tab');
+            document.getElementById(targetId).style.display = 'block';
         });
     });
 
-    // GENERATION DE LA GRILLE D'EFFECTIFS (PUBLIC)
+    // CRÉATION ET MISES À JOUR DES MODULES D'AFFICHAGE PUBLICS
     function renderPublicEffectifs() {
-        document.getElementById('public-date-update').textContent = dateMiseAJour;
-        const grid = document.getElementById('public-effectifs-grid');
-        if (!grid) return;
-        grid.innerHTML = "";
+        const dateSpan = document.getElementById('public-date-update');
+        if(dateSpan) dateSpan.textContent = dateMiseAJour;
+
+        const container = document.getElementById('public-effectifs-grid');
+        if (!container) return;
+        container.innerHTML = "";
 
         systemeEffectifs.forEach(cat => {
-            let listItems = "";
+            let innerRows = "";
             cat.postes.forEach(p => {
-                let badgeClass = "count-success";
-                if(p.actuel === 0) badgeClass = "count-danger";
-                else if(p.actuel < p.max) badgeClass = "count-warning";
+                let statusColor = "count-success";
+                if (p.actuel === 0) statusColor = "count-danger";
+                else if (p.actuel < p.max) statusColor = "count-warning";
 
-                listItems += `
-                    <li style="display: flex; justify-content: space-between; align-items: center; padding: 4px 0;">
-                        <span>${p.nom}</span> 
-                        <span class="badge-count ${badgeClass}">${p.actuel}/${p.max}</span>
+                innerRows += `
+                    <li style="display: flex; justify-content: space-between; align-items: center; border-bottom:1px solid #f1f5f9; padding:6px 0;">
+                        <span style="font-size:0.95rem;">${p.nom}</span>
+                        <span class="badge-count ${statusColor}">${p.actuel}/${p.max}</span>
                     </li>
                 `;
             });
 
-            grid.innerHTML += `
+            container.innerHTML += `
                 <div style="border: 1px solid #e5e5e5; border-radius: 6px; padding: 20px; background: white;">
-                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px;">${cat.categorie}</h3>
-                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 10px;">
-                        ${listItems}
+                    <h3 style="color: #000091; border-bottom: 2px solid #000091; padding-bottom: 8px; margin-bottom: 12px; font-size:1.1rem;">${cat.categorie}</h3>
+                    <ul style="list-style: none; display: flex; flex-direction: column; gap: 4px;">
+                        ${innerRows}
                     </ul>
                 </div>
             `;
         });
     }
 
-    // GENERATION DES FORMULAIRES DE MODIFICATION D'EFFECTIFS (ADMIN)
+    // CRÉATION DES CHAMPS DE SAISIE INTERNES (ADMIN EFFECTIF)
     function renderAdminEffectifs() {
         const container = document.getElementById('admin-effectifs-container');
         if (!container) return;
         container.innerHTML = "";
 
-        systemeEffectifs.forEach((cat, catIdx) => {
-            let inputsHtml = "";
-            cat.postes.forEach((p, postIdx) => {
-                inputsHtml += `
-                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
-                        <span style="flex-grow: 1; font-size: 0.9rem;">${p.nom}</span>
-                        <input type="number" value="${p.actuel}" min="0" data-cat="${catIdx}" data-post="${postIdx}" class="form-control effectif-actuel-input" style="width: 65px; margin: 0; text-align: center;">
-                        <span>/</span>
-                        <input type="number" value="${p.max}" min="1" data-cat="${catIdx}" data-post="${postIdx}" class="form-control effectif-max-input" style="width: 65px; margin: 0; text-align: center;">
+        systemeEffectifs.forEach((cat, cIdx) => {
+            let linesHtml = "";
+            cat.postes.forEach((p, pIdx) => {
+                linesHtml += `
+                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                        <span style="flex-grow: 1; font-size: 0.85rem; font-weight:600; color:#475569;">${p.nom}</span>
+                        <input type="number" value="${p.actuel}" min="0" data-c="${cIdx}" data-p="${pIdx}" class="adm-input edit-actuel" style="width: 60px; text-align: center; margin:0;">
+                        <span style="color:#94a3b8;">/</span>
+                        <input type="number" value="${p.max}" min="1" data-c="${cIdx}" data-p="${pIdx}" class="adm-input edit-max" style="width: 60px; text-align: center; margin:0;">
                     </div>
                 `;
             });
 
             container.innerHTML += `
-                <div class="admin-card" style="border-top: 4px solid var(--primary-blue);">
-                    <h4 style="margin-bottom: 15px; color: var(--primary-blue);">${cat.categorie}</h4>
-                    ${inputsHtml}
+                <div class="adm-card" style="border-top: 3px solid #000091;">
+                    <h4 style="margin: 0 0 15px 0; font-size: 0.95rem; color: #000091;">${cat.categorie}</h4>
+                    ${linesHtml}
                 </div>
             `;
         });
 
-        // Ecouteur pour enregistrer immédiatement chaque modification
-        document.querySelectorAll('.effectif-actuel-input').forEach(input => {
+        // Traitement automatique à la saisie pour éviter d'avoir à appuyer sur "Sauvegarder"
+        document.querySelectorAll('.edit-actuel').forEach(input => {
             input.addEventListener('input', function() {
-                const cIdx = this.getAttribute('data-cat');
-                const pIdx = this.getAttribute('data-post');
-                systemeEffectifs[cIdx].postes[pIdx].actuel = parseInt(this.value) || 0;
+                const c = this.getAttribute('data-c');
+                const p = this.getAttribute('data-p');
+                systemeEffectifs[c].postes[p].actuel = parseInt(this.value) || 0;
                 renderPublicEffectifs();
             });
         });
-        document.querySelectorAll('.effectif-max-input').forEach(input => {
+
+        document.querySelectorAll('.edit-max').forEach(input => {
             input.addEventListener('input', function() {
-                const cIdx = this.getAttribute('data-cat');
-                const pIdx = this.getAttribute('data-post');
-                systemeEffectifs[cIdx].postes[pIdx].max = parseInt(this.value) || 1;
+                const c = this.getAttribute('data-c');
+                const p = this.getAttribute('data-p');
+                systemeEffectifs[c].postes[p].max = parseInt(this.value) || 1;
                 renderPublicEffectifs();
             });
         });
     }
 
-    // MODIFIER LA DATE DE MISE A JOUR DEPUIS L'ADMIN
-    document.getElementById('btn-save-date').addEventListener('click', () => {
-        dateMiseAJour = document.getElementById('admin-date-input').value;
-        renderPublicEffectifs();
-        alert("📅 Date mise à jour avec succès sur le site !");
-    });
-
-    // CONNEXION ADMIN
-    document.getElementById('login-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        const inputUser = document.getElementById('username').value;
-        const inputPass = document.getElementById('password').value;
-        const msg = document.getElementById('login-message');
-        const compteTrouve = comptes.find(c => c.user === inputUser && c.pass === inputPass);
-        
-        if (compteTrouve) {
-            msg.style.color = "green"; msg.style.display = "block"; msg.textContent = "✅ Connexion réussie !";
-            setTimeout(() => { 
-                window.location.hash = "admin"; 
-                msg.style.display = "none"; 
-                this.reset(); 
-            }, 1000);
-        } else {
-            msg.style.color = "red"; msg.style.display = "block"; msg.textContent = "❌ Identifiants incorrects.";
-        }
-    });
-
-    // CANDIDATURE RH
-    document.getElementById('rh-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        candidatures.push({
-            id: Date.now(),
-            nom: document.getElementById('rh-nom').value,
-            prenom: document.getElementById('rh-prenom').value,
-            age: document.getElementById('rh-age').value,
-            role: document.getElementById('rh-role').value,
-            dispo: document.getElementById('rh-dispo').value,
-            motivation: document.getElementById('rh-motivation').value,
-            pourquoi: document.getElementById('rh-pourquoi').value
+    // MISE À JOUR DATE DPUIS ADMIN
+    const btnDate = document.getElementById('btn-save-date');
+    if(btnDate) {
+        btnDate.addEventListener('click', () => {
+            dateMiseAJour = document.getElementById('admin-date-input').value;
+            renderPublicEffectifs();
+            alert("📅 Date synchronisée sur les écrans publics !");
         });
-        this.reset();
-        alert("✨ Votre candidature a bien été transmise !");
-        updateAdminView();
-        window.location.hash = "accueil";
-    });
+    }
 
-    // ACTUALITÉS (PUBLIC + LISTE INTERNE ADMIN AVEC SUPPRESSION)
+    // CONNEXION COMPTE ADM
+    const loginForm = document.getElementById('login-form');
+    if(loginForm) {
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const u = document.getElementById('username').value;
+            const p = document.getElementById('password').value;
+            const msg = document.getElementById('login-message');
+            
+            const match = comptes.find(c => c.user === u && c.pass === p);
+            if(match) {
+                msg.style.color = "green"; msg.style.display = "block"; msg.textContent = "✅ Identification validée...";
+                setTimeout(() => {
+                    window.location.hash = "admin";
+                    msg.style.display = "none";
+                    this.reset();
+                }, 800);
+            } else {
+                msg.style.color = "red"; msg.style.display = "block"; msg.textContent = "❌ Clé ou identifiant non reconnu.";
+            }
+        });
+    }
+
+    // SOUCOUPES : ACTUALITÉS (PUBLIC + INTERNE)
     function renderAnnonces() {
-        const publicContainer = document.getElementById('dynamic-news');
-        const adminContainer = document.getElementById('admin-news-list');
-        
-        if (publicContainer) {
-            publicContainer.innerHTML = articles.length === 0 ? `<p style="color:#666; font-style:italic; grid-column: 1 / -1;">Aucune actualité pour le moment.</p>` : "";
+        const publicArea = document.getElementById('dynamic-news');
+        const adminArea = document.getElementById('admin-news-list');
+
+        if(publicArea) {
+            publicArea.innerHTML = articles.length === 0 ? `<p style="color:#666; font-style:italic; grid-column: 1/-1;">Aucune actualité diffusée actuellement.</p>` : "";
             articles.forEach(art => {
-                publicContainer.innerHTML += `
+                publicArea.innerHTML += `
                     <article style="background:white; border:1px solid #e5e5e5; border-radius:6px; padding:20px;">
                         <span style="color:#e1000f; font-size:0.8rem; font-weight:bold; text-transform:uppercase;">${art.tag}</span>
-                        <h3 style="margin:10px 0;">${art.title}</h3>
-                        <p style="color:#444; font-size:0.95rem;">${art.desc}</p>
+                        <h3 style="margin:8px 0;">${art.title}</h3>
+                        <p style="color:#444; font-size:0.95rem; margin:0;">${art.desc}</p>
                     </article>
                 `;
             });
         }
 
-        if (adminContainer) {
-            adminContainer.innerHTML = articles.length === 0 ? `<p style="color:#777; font-style:italic;">Aucune annonce créée.</p>` : "";
+        if(adminArea) {
+            adminArea.innerHTML = articles.length === 0 ? `<p style="color:#94a3b8; font-style:italic; margin:0;">Aucun article actif.</p>` : "";
             articles.forEach((art, index) => {
-                adminContainer.innerHTML += `
-                    <div style="border:1px solid #cbd5e1; padding:12px; border-radius:5px; display:flex; justify-content:space-between; align-items:center; background:#fafafa;">
+                adminArea.innerHTML += `
+                    <div style="border:1px solid #e2e8f0; padding:12px; border-radius:6px; display:flex; justify-content:space-between; align-items:center; background:#f8fafc;">
                         <div>
-                            <strong style="font-size:0.9rem;">${art.title}</strong>
-                            <span style="font-size:0.75rem; background:#cbd5e1; padding:2px 5px; border-radius:3px; margin-left:5px;">${art.tag}</span>
+                            <strong style="font-size:0.9rem; color:#1e293b;">${art.title}</strong>
+                            <span style="font-size:0.7rem; background:#e2e8f0; padding:2px 6px; border-radius:4px; margin-left:6px; font-weight:bold; color:#475569;">${art.tag}</span>
                         </div>
-                        <button class="btn del-news-btn" data-index="${index}" style="background:#e1000f; color:white; padding:4px 8px; font-size:0.8rem; border-radius:3px;">Supprimer</button>
+                        <button class="action-del-news" data-idx="${index}" style="background:#ef4444; color:white; border:none; padding:4px 8px; border-radius:4px; cursor:pointer; font-size:0.8rem; font-weight:bold;">Supprimer</button>
                     </div>
                 `;
             });
         }
     }
 
-    // FORMULAIRE CRÉATION ANNONCE ADMIN
-    document.getElementById('admin-news-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        articles.unshift({
-            id: Date.now(),
-            title: document.getElementById('news-title').value,
-            tag: document.getElementById('news-tag').value,
-            desc: document.getElementById('news-desc').value
+    const newsForm = document.getElementById('admin-news-form');
+    if(newsForm) {
+        newsForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            articles.unshift({
+                title: document.getElementById('news-title').value,
+                tag: document.getElementById('news-tag').value,
+                desc: document.getElementById('news-desc').value
+            });
+            this.reset();
+            renderAnnonces();
+            alert("📢 Article publié !");
         });
-        this.reset();
-        alert("📢 Annonce publiée avec succès !");
-        renderAnnonces();
-    });
+    }
 
-    // COMPTES & RECETTES INTERNES
-    function updateAdminView() {
-        const userTable = document.getElementById('admin-users-table');
-        if (userTable) {
-            userTable.innerHTML = "";
-            comptes.forEach((c, index) => {
-                const btn = c.user === "VH" ? `<span style="color:#777; font-size:0.85rem; font-style:italic;">Maître</span>` : `<button class="del-user-btn" data-index="${index}" style="background:#e1000f; color:white; border:none; padding:4px 8px; border-radius:3px; cursor:pointer;">Supprimer</button>`;
-                userTable.innerHTML += `
-                    <tr style="border-bottom:1px solid #e5e5e5;">
-                        <td style="padding:8px; font-weight:bold;">${c.user}</td>
-                        <td style="padding:8px; color:#666; font-family:monospace;">${c.pass}</td>
-                        <td style="padding:8px; text-align:right;">${btn}</td>
+    // FORMULAIRE DE RECRUTEMENT PUBLIC (REMPLIT LA SIDEBAR)
+    const rhForm = document.getElementById('rh-form');
+    if(rhForm) {
+        rhForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            candidatures.push({
+                id: Date.now(),
+                nom: document.getElementById('rh-nom').value,
+                prenom: document.getElementById('rh-prenom').value,
+                age: document.getElementById('rh-age').value,
+                role: document.getElementById('rh-role').value,
+                dispo: document.getElementById('rh-dispo').value,
+                motivation: document.getElementById('rh-motivation').value,
+                pourquoi: document.getElementById('rh-pourquoi').value
+            });
+            this.reset();
+            alert("✨ Informations transmises à la direction !");
+            updateAdminViews();
+            window.location.hash = "accueil";
+        });
+    }
+
+    // GESTION COMPTES MODÉRATEURS & LISTES INTERNES
+    function updateAdminViews() {
+        const badge = document.getElementById('badge-rh-count');
+        if(badge) badge.textContent = candidatures.length;
+
+        const table = document.getElementById('admin-users-table');
+        if (table) {
+            table.innerHTML = "";
+            comptes.forEach((c, idx) => {
+                const action = c.user === "VH" ? `<span style="color:#94a3b8; font-size:0.8rem; font-style:italic;">Directeur</span>` : `<button class="action-del-user" data-idx="${idx}" style="background:#ef4444; color:white; border:none; padding:3px 7px; border-radius:3px; cursor:pointer; font-weight:bold; font-size:0.8rem;">Retirer</button>`;
+                table.innerHTML += `
+                    <tr style="border-bottom:1px solid #e2e8f0;">
+                        <td style="padding:10px 8px; font-weight:600; color:#334155;">${c.user}</td>
+                        <td style="padding:10px 8px; font-family:monospace; color:#64748b;">${c.pass}</td>
+                        <td style="padding:10px 8px; text-align:right;">${action}</td>
                     </tr>
                 `;
             });
         }
 
-        document.getElementById('rh-count-badge').textContent = candidatures.length;
-        const rhList = document.getElementById('admin-rh-list');
-        if (rhList) {
+        const rhContainer = document.getElementById('admin-rh-list');
+        if (rhContainer) {
             if(candidatures.length === 0) {
-                rhList.innerHTML = `<div class="admin-card"><p style="color:#777; font-style:italic;">Aucune candidature pour le moment.</p></div>`;
+                rhContainer.innerHTML = `<div class="adm-card"><p style="color:#64748b; font-style:italic; margin:0;">Aucun dossier en attente.</p></div>`;
             } else {
-                rhList.innerHTML = "";
+                rhContainer.innerHTML = "";
                 candidatures.forEach(cand => {
-                    rhList.innerHTML += `
-                        <div class="admin-card" style="margin-bottom:15px; border-left:5px solid #000091;">
-                            <h4>👤 ${cand.prenom} ${cand.nom} (${cand.age} ans) — <span style="color:#000091;">${cand.role}</span></h4>
-                            <p style="margin:5px 0;"><strong>Dispo :</strong> ${cand.dispo}</p>
-                            <p style="margin:5px 0;"><strong>Motivations :</strong> ${cand.motivation}</p>
-                            <p style="margin:5px 0;"><strong>Pourquoi :</strong> ${cand.pourquoi}</p>
-                            <div style="margin-top:10px;">
-                                <button class="status-btn btn" data-id="${cand.id}" data-action="accepter" style="background:#16a34a; color:white; margin-right:5px;">Accepter</button>
-                                <button class="status-btn btn" data-id="${cand.id}" data-action="refuser" style="background:#e1000f; color:white;">Refuser</button>
+                    rhContainer.innerHTML += `
+                        <div class="adm-card" style="border-left: 5px solid #000091;">
+                            <h4 style="margin:0 0 10px 0; color:#1e293b;">👤 ${cand.prenom} ${cand.nom} (${cand.age} ans) — <span style="color:#000091;">${cand.role}</span></h4>
+                            <p style="margin:4px 0; font-size:0.9rem;"><strong>Dispo :</strong> ${cand.dispo}</p>
+                            <p style="margin:4px 0; font-size:0.9rem;"><strong>Motivations :</strong> ${cand.motivation}</p>
+                            <p style="margin:4px 0; font-size:0.9rem;"><strong>Pourquoi lui/elle :</strong> ${cand.pourquoi}</p>
+                            <div style="margin-top:12px; display:flex; gap:8px;">
+                                <button class="action-decision" data-id="${cand.id}" data-type="accept" style="background:#16a34a; color:white; border:none; padding:6px 12px; border-radius:4px; font-weight:bold; cursor:pointer;">Accepter</button>
+                                <button class="action-decision" data-id="${cand.id}" data-type="refuse" style="background:#ef4444; color:white; border:none; padding:6px 12px; border-radius:4px; font-weight:bold; cursor:pointer;">Refuser</button>
                             </div>
                         </div>
                     `;
@@ -328,41 +343,42 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // FORMULAIRE COMPTES MODÉRATEURS
-    document.getElementById('admin-user-form').addEventListener('submit', function(e) {
-        e.preventDefault();
-        comptes.push({
-            user: document.getElementById('new-user-name').value,
-            pass: document.getElementById('new-user-pass').value,
-            role: "Modérateur"
+    const userForm = document.getElementById('admin-user-form');
+    if(userForm) {
+        userForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            comptes.push({
+                user: document.getElementById('new-user-name').value,
+                pass: document.getElementById('new-user-pass').value
+            });
+            this.reset();
+            updateAdminViews();
+            alert("👤 Opérateur ajouté !");
         });
-        document.getElementById('new-user-name').value = "";
-        document.getElementById('new-user-pass').value = "";
-        alert("👤 Compte modérateur créé !");
-        updateAdminView();
-    });
+    }
 
-    // LISTENERS CLICKS CLASSIQUES (SUPPRESSION ACTUS & ACCÈS)
-    document.body.addEventListener('click', function(e) {
-        if(e.target.classList.contains('del-user-btn')) {
-            comptes.splice(e.target.getAttribute('data-index'), 1);
-            updateAdminView();
+    // ÉCOUTEUR DE CLICKS GLOBAL POUR LES ACTIONS SUPPRESSIONS
+    document.body.addEventListener('click', (e) => {
+        if(e.target.classList.contains('action-del-user')) {
+            comptes.splice(e.target.getAttribute('data-idx'), 1);
+            updateAdminViews();
         }
-        if(e.target.classList.contains('del-news-btn')) {
-            articles.splice(e.target.getAttribute('data-index'), 1);
+        if(e.target.classList.contains('action-del-news')) {
+            articles.splice(e.target.getAttribute('data-idx'), 1);
             renderAnnonces();
         }
-        if(e.target.classList.contains('status-btn')) {
+        if(e.target.classList.contains('action-decision')) {
             const id = parseInt(e.target.getAttribute('data-id'));
+            const type = e.target.getAttribute('data-type');
             candidatures = candidatures.filter(c => c.id !== id);
-            alert(e.target.getAttribute('data-action') === "accepter" ? "✅ Candidature Acceptée !" : "❌ Candidature Refusée.");
-            updateAdminView();
+            alert(type === "accept" ? "✅ Dossier validé !" : "❌ Candidature rejetée.");
+            updateAdminViews();
         }
     });
 
-    // RUN ON LOAD
+    // ÉXÉCUTION DE SÉCURITÉ AU LANCEMENT
     renderPublicEffectifs();
     renderAdminEffectifs();
     renderAnnonces();
-    updateAdminView();
+    updateAdminViews();
 });
