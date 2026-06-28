@@ -26,6 +26,13 @@ body {
     margin: 0 auto; 
 }
 
+/* --- LOGO SÉCURISÉ --- */
+.site-logo {
+    height: 75px;
+    width: auto;
+    display: block;
+}
+
 /* --- ACCESSIBILITÉ --- */
 .accessibility-bar { 
     background-color: #222; 
@@ -72,22 +79,9 @@ body.dyslexia-font {
     align-items: center; 
     flex-wrap: wrap; 
 }
-.logo-area .logo-link {
-    text-decoration: none;
-}
-.logo-area .logo-text { 
-    font-size: 2rem; 
-    font-weight: bold; 
-    color: var(--primary-blue); 
-}
-.logo-area .logo-text span { 
-    color: var(--accent-red); 
-}
-.logo-area .logo-sub { 
-    display: block; 
-    font-size: 0.9rem; 
-    color: #666; 
-    text-transform: uppercase; 
+.logo-area {
+    display: flex;
+    align-items: center;
 }
 .search-form input { 
     padding: 10px; 
@@ -149,6 +143,20 @@ body.dyslexia-font {
     padding-left: 10px; 
 }
 
+/* --- COMPTEURS PAGES EFFECTIFS --- */
+.badge-count {
+    padding: 4px 10px;
+    font-weight: bold;
+    font-size: 0.85rem;
+    border-radius: 20px;
+    color: white;
+    min-width: 45px;
+    text-align: center;
+}
+.count-success { background-color: #1f8d49; } /* Vert complet */
+.count-warning { background-color: #ff9100; } /* Orange incomplet */
+.count-danger { background-color: #e1000f; }  /* Rouge vide */
+
 /* --- GESTION DE PAGES --- */
 main.page-content { 
     display: none; 
@@ -177,11 +185,4 @@ main.page-content {
 .footer-links a { 
     color: #444; 
     text-decoration: none; 
-}
-
-/* Rend le logo propre et à la bonne taille */
-.site-logo {
-    height: 75px;      /* Fixe une hauteur de 75 pixels */
-    width: auto;       /* Garde les proportions sans déformer l'image */
-    display: block;
 }
