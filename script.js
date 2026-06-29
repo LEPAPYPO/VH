@@ -97,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('hashchange', router);
     router();
 
-    // Onglets internes du panel Admin
     document.querySelectorAll('.adm-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             document.querySelectorAll('.adm-btn').forEach(b => b.classList.remove('active'));
@@ -109,7 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Affichage des effectifs sur la partie publique (Zéro émojis)
     function renderPublicEffectifs() {
         const dateSpan = document.getElementById('public-date-update');
         if(dateSpan) dateSpan.textContent = dateMiseAJour;
@@ -144,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Affichage édition des effectifs (Panel admin)
     function renderAdminEffectifs() {
         const container = document.getElementById('admin-effectifs-container');
         if (!container) return;
@@ -199,7 +196,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gestion formulaire Connexion
     const loginForm = document.getElementById('login-form');
     if(loginForm) {
         loginForm.addEventListener('submit', function(e) {
@@ -222,7 +218,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gestion des actualités
     function renderAnnonces() {
         const publicArea = document.getElementById('dynamic-news');
         const adminArea = document.getElementById('admin-news-list');
@@ -271,7 +266,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Formulaire d'envoi RH
     const rhForm = document.getElementById('rh-form');
     if(rhForm) {
         rhForm.addEventListener('submit', function(e) {
@@ -293,7 +287,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Mise à jour des vues Panel Admin
     function updateAdminViews() {
         const badge = document.getElementById('badge-rh-count');
         if(badge) badge.textContent = candidatures.length;
@@ -351,7 +344,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Gestionnaire global des boutons d'actions (Suppression / Décisions)
     document.body.addEventListener('click', (e) => {
         if(e.target.classList.contains('action-del-user')) {
             comptes.splice(e.target.getAttribute('data-idx'), 1);
@@ -370,7 +362,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Initialisation
     renderPublicEffectifs();
     renderAdminEffectifs();
     renderAnnonces();
