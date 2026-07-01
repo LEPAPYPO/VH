@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
             categorie: "Direction Générale Académique",
             postes: [
                 { nom: "Directeurs Généraux Académique", actuel: 2, max: 2 },
-                { nom: "Directeurs Généraux Académique Adjoints", actuel: 3, max: 3 },
+                { nom: "Directeurs Généraux Académique Adjoints", actuel: 2, max: 2 },
                 { nom: "Assistant général Académique", actuel: 1, max: 1 }
             ]
         },
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
         {
             categorie: "Cabinet",
             postes: [
-                { nom: "Directeur du Cabinet", actuel: 1, max: 1 },
+                { nom: "Directeur du Cabinet", actuel: 0, max: 1 },
                 { nom: "Secrétaire du Cabinet", actuel: 0, max: 1 },
                 { nom: "Agents du Cabinet", actuel: 0, max: 2 }
             ]
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postes: [
                 { nom: "Directeur des Ressources Humaines", actuel: 1, max: 1 },
                 { nom: "Gestionnaire des RH", actuel: 0, max: 1 },
-                { nom: "Assistants RH", actuel: 0, max: 2 }
+                { nom: "Assistants RH", actuel: 1, max: 2 }
             ]
         },
         {
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
             postes: [
                 { nom: "Directeur Service Numérique", actuel: 1, max: 1 },
                 { nom: "Délégué Académique au Numérique", actuel: 0, max: 1 },
-                { nom: "Techniciens", actuel: 1, max: 3 }
+                { nom: "Techniciens", actuel: 2, max: 3 }
             ]
         },
         {
