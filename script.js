@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let articles = []; 
     let comptes = [{ user: "VH", pass: "12345678" }];
     let candidatures = [];
-    let dateMiseAJour = "29/06/2026";
+    let dateMiseAJour = "01/07/2026";
 
     // Gestion du routage des pages (#accueil, #admin, etc.)
     function router() {
